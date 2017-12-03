@@ -26,5 +26,6 @@ Folder and files:
 
 Requirements:
 --------------------------------------------
-"mdcgen" is required for some function. You can download it from here:
+"mdcgen" is required to generate datasets for some functions. You can download it from here:
 https://github.com/felixig/mdcgen-matlab
+Simply create a [mdcgen] folder and save the "mdcgen.m" script inside.
