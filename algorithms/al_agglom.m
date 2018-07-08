@@ -44,7 +44,7 @@ function r = al_agglom(data,k)
     Z = linkage(data,'ward','euclidean');
     c = cluster(Z,'maxclust',k);
     for i=1:max(c)
-        V(i,:)=mean(data(c==i,:),1);
+        V(i,:)=nanmean(data(c==i,:),1);
     end
     D=power(dist(data,V'),2);
     W=partition_matrix(data,V,k,2);

@@ -1,4 +1,4 @@
-function [ r ] = mmod_test( seed )
+function [ r ] = mmod_test( pca_flag, seed )
 % MMOD_TEST creates datasets with k clusters and checks if multimodality
 % (mm) is correctly detected by using kernel density estimations. I.e.,
 % k=1, mm=0 --> GOOD detection (TN)
@@ -27,6 +27,7 @@ function [ r ] = mmod_test( seed )
 %------------------------------------------------------------------------------------------------------
 
 % ----------- inputs ------------ 
+% pca_flag: if >0, the pca transformation is applied on the dataset 
 % seed: random seed
 
 % ----------- outputs -----------
@@ -46,6 +47,7 @@ function [ r ] = mmod_test( seed )
 
 exp=10000; ct=0;
 
+if exist('pca_flag')==0, pca_flag=0;end
 if exist('seed')==0, seed=100;end
 p.sd=seed;
 rng(p.sd);
@@ -64,15 +66,21 @@ N=2+floor(19*rand(exp,1));
 k=1+floor(5*rand(exp,1));
 d=1+floor(5*rand(exp,1));
 cp=0.01+0.09*rand(exp,1);
+out=rand(exp,1);
 
 TP=0;FP=0;TN=0;FN=0;
 
 for i=1:exp
     MN=[];label=[];
-    p.d=d(i); p.M=M(i); p.N=N(i); p.k=k(i); p.cp=cp(i); 
+    p.d=d(i); p.M=M(i); p.N=N(i); p.k=k(i); p.cp=cp(i); p.out=5+floor(0.1*M(i)*out(i));
     if d(i)==5, p.mv=-1; else, p.mv=0; end
     dataset = mdcgen( p );
-    MN=dataset.MN; label=dataset.label;
+    MNo=dataset.MN; label=dataset.label;
+    if (pca_flag)
+        [coef MN] = pca(MNo);
+    else
+        MN=MNo;
+    end
     mm(i) = multimod( MN );
     if (k(i)>1) %if k==1, clustering is not necessary
         [class,centers,A,D] = kmeans(MN,k(i),'start','uniform', 'emptyaction','singleton');

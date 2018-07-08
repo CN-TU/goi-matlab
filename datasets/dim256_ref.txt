@@ -1,0 +1,13 @@
+High-dimensional data sets N=1024 and k=16 Gaussian clusters.
+
+P. Fränti, O. Virmajoki and V. Hautamäki, "Fast agglomerative clustering using a k-nearest neighbor graph", IEEE Trans. on Pattern Analysis and Machine Intelligence, 28 (11), 1875-1881, November 2006. 
+
+@article{DIMsets,
+    author = {P. Fr\"anti and O. Virmajoki and V. Hautam\"aki},
+    title = {Fast agglomerative clustering using a k-nearest neighbor graph},
+    journal = {IEEE Trans. on Pattern Analysis and Machine Intelligence},
+    year = {2006},
+    volume = {28},
+    number = {11},
+    pages = {1875--1881}
+}

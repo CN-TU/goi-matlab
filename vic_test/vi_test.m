@@ -1,4 +1,4 @@
-function [ r ] = vi_test ( seed )
+function [ r ] = vi_test ( exp, noise_flag, seed )
 % VI_TEST compares cluster validity indices by using a set of 'x' experiments
 % (exp) with a different multi-dimensional dataset per experiment
 
@@ -23,6 +23,8 @@ function [ r ] = vi_test ( seed )
 %------------------------------------------------------------------------------------------------------
 
 % ----------- inputs ------------ 
+% exp: number of experiments
+% noise_flag: if 1, up to 10% outliers is added to datasets
 % seed: random seed
 
 % ----------- outputs ----------- 
@@ -36,6 +38,8 @@ function [ r ] = vi_test ( seed )
 addpath(genpath('../../CVTbed'));
 %clear all; clc;
 
+if exist('exp')==0, exp=1000;end
+if exist('noise_flag')==0, noise_flag=0;end
 if exist('seed')==0, seed=310716;end
 
 % pd: paramters for dataset
@@ -44,26 +48,30 @@ pd.sd=seed;
 pd.corr=0;
 pd.alphaN=1;
 pd.scale=1;
-pd.out=0;
 pd.rot=0;
 pd.mv=1;
 
-exp=1000;     %number of datasets-experiments
+%exp=1000;     %number of datasets-experiments
 rng(pd.sd); %control random number generation
 
 % variable parameters for testing
 M=200+floor(1901*rand(exp,1));
 N=3+floor(18*rand(exp,1));
+N=3+floor(17*rand(exp,1));
 k=2+floor(7*rand(exp,1));
 d=1+floor(6*rand(exp,1));
 cp=0.05+0.05*rand(exp,1);
 alg=1+floor(4*rand(exp,1));
-%out=floor(bsxfun(@times,M,0.1*rand(exp,1)));
+if (noise_flag)
+    out=floor(bsxfun(@times,M,0.1*rand(exp,1)));
+else
+    out=zeros(exp,1); 
+end
 
 ct=0;
 for i=1:exp  
     data=[];
-    pd.d=d(i); pd.M=M(i); pd.N=N(i); pd.k=k(i); pd.cp=cp(i); %pd.out=out(i);
+    pd.d=d(i); pd.M=M(i); pd.N=N(i); pd.k=k(i); pd.cp=cp(i); pd.out=out(i);
     if pd.d==6, mv=-1; else, mv=1; end %to avoid split-clusters 
     [dataset] = mdcgen( pd );
     
@@ -95,9 +103,9 @@ for i=1:exp
     Gm(i)=record(i).Gm;
     PART(i)=record(i).PART; %original data partition according to the generator
     
-    fprintf('.');
-    if (mod(i,50)==0) 
-        fprintf('%d x 50\n',ct);
+    fprintf('I');
+    if (mod(i,20)==0) 
+        fprintf('%d x 20\n',ct);
         ct=ct+1;
     end
 

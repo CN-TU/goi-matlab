@@ -1,5 +1,5 @@
 function r = al_kmedoids(data,k)
-% AL_KMEANS performs the MATLAB kmedoids algorithm and extracts clustering
+% AL_KMEDOIDS performs the MATLAB kmedoids algorithm and extracts clustering
 % context information
 
 %------------------------------------------------------------------------------------------------------
@@ -49,9 +49,9 @@ function r = al_kmedoids(data,k)
     mind=sqrt(nanmin(D')');
     for j=1:k
         if isempty(mind(cl==j))==0
-            r.cluster.mdDa(j)=median(mind(cl==j));
-            r.cluster.mnDa(j)=mean(mind(cl==j));
-            r.cluster.sdDa(j)=std(mind(cl==j));
+            r.cluster.mdDa(j)=nanmedian(mind(cl==j));
+            r.cluster.mnDa(j)=nanmean(mind(cl==j));
+            r.cluster.sdDa(j)=nanstd(mind(cl==j));
         else
             r.cluster.mdDa(j)=0;
             r.cluster.mnDa(j)=0;
@@ -59,7 +59,7 @@ function r = al_kmedoids(data,k)
         end
     end
     De=dist(V');
-    [minDe closest]=min(De+(max(max(De))+1)*eye(k)); 
+    [minDe closest]=nanmin(De+(max(max(De))+1)*eye(k)); 
     
     r.cluster.V=V;
     r.data.D=D;

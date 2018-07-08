@@ -1,10 +1,14 @@
-CVTbed v1.0
-FIV, Dec 2017
+CVTbed v2.0
+FIV, Jul 2018
+
 
 Description:
 --------------------------------------------
-CVTbed v1.0 is a testbed for Cluster Validation implemented in the MATLAB environment (R2016a). 
-GOI indices (absolute cluster validation indices) are included in the testbed.
+CVTbed v2.0 is a testbed for Cluster Validation implemented in the MATLAB environment (R2018a). 
+"G" and "oi" indices (absolute cluster validation indices) are included in the testbed.
+
+"G" and "oi" indices are introduced in the paper:
+- Absolute Cluster Validity, by Félix Iglesias, Tanja Zseby and Arthur Zimek. Publication pending.
 
 
 Folder and files:
@@ -24,8 +28,124 @@ Folder and files:
 "README": this file
 "start.m": runs a wizard for selecting 2D-datasets and parameters for comparing solutions with different "k" values
 
+
 Requirements:
 --------------------------------------------
 "mdcgen" is required to generate datasets for some functions. You can download it from here:
 https://github.com/felixig/mdcgen-matlab
 Simply create a [mdcgen] folder and save the "mdcgen.m" script inside.
+
+
+Repeating paper experiments ans tests:
+--------------------------------------------
+
+0. Add the [goi-matlab-master] folder and subfolders into the path
+
+1. Relative density (Section IV.B)
+   Execute: 
+	>> r = density_test ( seed );
+   % The random seed used in the paper was: "seed = 100"
+   % With no arguments, the random seed by default is: "seed = 100"
+
+2. Cluster multimodality (Section IV.C)
+   Execute: 
+	>> r = mmod_test ( pca_flag, seed );
+   % The random seed used in the paper was: "seed = 100"
+   % Tests were performed with both: "pca_flag = 0" and "pca_flag = 1"
+
+3. Interpretation of the context (Section V)
+   
+   For cases a), b) and c), execute: 
+	>> start
+	dataset?     >> 7 % simple_out.csv
+	algorithm?   >> 3 % agglomerative
+	out. rej?    >> 0 % no
+	center corr. >> 0 % no
+	k-min?       >> 3
+ 	k-max?       >> 5
+	>> r = clustperf_comp ( dataset, pclust );
+   % Results are stored in the [log] folder
+
+   For case d), execute: 
+	>> start
+	dataset?     >> 7 % simple_out.csv
+	algorithm?   >> 3 % agglomerative
+	out. rej?    >> 1 % yes
+	center corr. >> 0 % no
+	k-min?       >> 4
+ 	k-max?       >> 4
+	>> r = clustperf_comp ( dataset , pclust );
+   % Results are stored in the [log] folder (note that previous results will be overwritten!)
+
+4. Indices Comparison, Example 1 "Compact, glued clusters" (Section VI.A)
+   Execute: 
+	>> start
+	dataset?     >> 2 % a1.csv
+	algorithm?   >> 3 % agglomerative
+	out. rej?    >> 0 % no
+	center corr. >> 0 % no
+	k-min?       >> 15
+ 	k-max?       >> 25
+	>> r = clustperf_comp ( dataset , pclust );
+   % Results are stored in the [log] folder (note that previous results will be overwritten!)
+
+
+5. Indices Comparison, Example 2 "Different density clusters" (Section VI.B)
+   Execute: 
+	>> start
+	dataset?     >> 5 % unbalance.csv
+	algorithm?   >> 4 % fuzzy-fcm
+	out. rej?    >> 0 % no
+	center corr. >> 0 % no
+	k-min?       >> 2
+ 	k-max?       >> 10
+	>> r = clustperf_comp ( dataset , pclust );
+   % Results are stored in the [log] folder (note that previous results will be overwritten!)
+   % Results might differ from the paper due to the non-deterministic behaviour of the fcm-algorithm. 
+   % If so, the user can simply repeat the test several times until matching the performances shown in the paper.
+
+6. Indices Comparison, Example 3 "Real, multi-dimensional dataset with overlapped, non-globular clusters" (Section VI.C)
+   Execute: 
+	>> comp_ex3_real;
+
+7. Indices Comparison, Example 4 "High-dimensional dataset" (Section VI.D)
+   Execute: 
+	>> comp_ex4_highDim;
+
+8. Indices Comparison, Example 5 "Tests with multi-dimensional datasets" (Section VI.E)
+   Execute: 
+	>> r = vi_test ( exp, noise_flag, seed );
+   % The random seed used in the paper was: "seed = 310716"
+   % Tests were performed with both: "noise_flag = 0" and "noise_flag = 1"
+   % Tests were performed with: "exp = 1000"
+
+
+Dataset references:
+--------------------------------------------
+
+- The real dataset used in Example 3, Section VI.C, is available to download in:
+
+M. Charytanowicz and J. Niewczas, “Seeds Data Set,”
+UCI Machine Learning Repository, 2012. [Online]. Available:
+https://archive.ics.uci.edu/ml/datasets/seeds
+
+and was presented/used in:
+
+M. Charytanowicz, J. Niewczas, P. Kulczycki, P. A. Kowalski, S. Łukasik, and S. Zak,
+“Complete gradient clustering algorithm for features analysis of x-ray images,” in Information Technologies in
+Biomedicine, E. Pitka and J. Kawa, Eds. Berlin, Heidelberg: Springer Berlin Heidelberg, 2010, pp. 15–24.
+
+
+- The high-dim dataset used in Example 4, Section VI.D, is available to download in:
+
+P. Fränti and S. Sieranoja, “K-means properties on six clustering benchmark datasets,” 2018. [Online]. Available:
+http://cs.uef.fi/sipu/datasets/
+
+and was presented/used in:
+
+P. Fränti, O. Virmajoki, and V. Hautamäki, “Fast agglomerative clustering using a k-nearest neighbor graph,” IEEE Trans. on Pattern Analysis and Machine Intelligence, vol. 28, no. 11, pp. 1875–1881, 2006.
+
+- Example 1 is also taken from:
+
+P. Fränti and S. Sieranoja, “K-means properties on six clustering benchmark datasets,” 2018. [Online]. Available:
+http://cs.uef.fi/sipu/datasets/

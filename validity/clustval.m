@@ -65,14 +65,14 @@ eva = evalclusters(data,cl,'DaviesBouldin');
 DB=eva.CriterionValues;
         
 % partition coefficient (PC)
-PC = 1/M*sum(sum(W.^2));
+PC = 1/M*nansum(nansum(W.^2));
 
 % classification entropy (CE)
 LW = (W).*log(W);
-CE = -1/M*sum(sum(LW));    
+CE = -1/M*sum(nansum(LW));    
 
 % Xie and Beni's index (XB)
-XB = sum((sum(D.*W.^2))./(M*min(minDe)));
+XB = sum((nansum(D.*W.^2))./(M*min(minDe)));
 
 % G overlap family (Gstr, Grex, Gmin)
 [ g ] = Gvalidity(k,De,mdDa,mnDa,sdDa,mass);

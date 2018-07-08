@@ -84,6 +84,7 @@ if (fut ~= 4)
 end
 
 for i=1:length(xfut)
+    fprintf(".");
     switch fut
         case 1, k=xfut(i);
         case 2, algorithm=xfut(i);
@@ -100,10 +101,10 @@ for i=1:length(xfut)
     rclust = clustout(dataset.MN,k,algorithm,orF,orc,densC);  
     if (orF)
         rclustNo=rclust;
-        datasetNo.MN=dataset.MN(rclust.data.cldo>1,:);
-        rclustNo.data.cl=rclust.data.cldo(rclust.data.cldo>1);
-        rclustNo.data.W=rclust.data.W(rclust.data.cldo>1,:);
-        rclustNo.data.D=rclust.data.D(rclust.data.cldo>1,:);
+        datasetNo.MN=dataset.MN(rclust.data.cldo>0,:);
+        rclustNo.data.cl=rclust.data.cldo(rclust.data.cldo>0);
+        rclustNo.data.W=rclust.data.W(rclust.data.cldo>0,:);
+        rclustNo.data.D=rclust.data.D(rclust.data.cldo>0,:);
         val = clustval(datasetNo.MN,k,rclustNo);
     else
         val = clustval(dataset.MN,k,rclust);
